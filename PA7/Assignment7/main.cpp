@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 {
 
     // Change the definition here to change resolution
-    Scene scene(784, 784);
+    Scene scene(196, 196);
 
     Material* red = new Material(DIFFUSE, Vector3f(0.0f));
     red->Kd = Vector3f(0.63f, 0.065f, 0.05f);
@@ -38,11 +38,9 @@ int main(int argc, char** argv)
     scene.Add(&left);
     scene.Add(&right);
     scene.Add(&light_);
-
     scene.buildBVH();
 
     Renderer r;
-
     auto start = std::chrono::system_clock::now();
     r.Render(scene);
     auto stop = std::chrono::system_clock::now();

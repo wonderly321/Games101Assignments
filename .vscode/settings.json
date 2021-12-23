@@ -69,7 +69,13 @@
         "unordered_map": "cpp",
         "xhash": "cpp",
         "complex": "cpp",
-        "cstdarg": "cpp"
+        "cstdarg": "cpp",
+        "mutex": "cpp",
+        "condition_variable": "cpp",
+        "deque": "cpp",
+        "queue": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp"
     },
     "editor.guides.bracketPairs": true,
 }

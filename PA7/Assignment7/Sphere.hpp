@@ -78,7 +78,6 @@ public:
                        Vector3f(center.x+radius, center.y+radius, center.z+radius));
     }
     void Sample(Intersection &pos, float &pdf){
-        //按照该材质的性质，给定入射方向与法向量，用某种分布采样出一个出射方向
         float theta = 2.0 * M_PI * get_random_float(), phi = M_PI * get_random_float();
         Vector3f dir(std::cos(phi), std::sin(phi)*std::cos(theta), std::sin(phi)*std::sin(theta));
         pos.coords = center + radius * dir;

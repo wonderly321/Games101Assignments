@@ -88,25 +88,25 @@ public:
                            const std::array<int, 3> &dirisNeg) const;
 };
 
-inline bool Bounds3::IntersectP(const Ray& ray, const Vector3f& invDir, const std::array<int, 3>& dirIsNeg) const
+inline bool Bounds3::IntersectP(const Ray &ray, const Vector3f &invDir,
+                                const std::array<int, 3> &dirIsNeg) const
 {
-	// 光线进入点
-	float tEnter = std::numeric_limits<float>::min();
-	// 光线离开点
-	float tExit = std::numeric_limits<float>::max();
-	for (int i = 0; i < 3; i++)
-	{
-		float min = (pMin[i] - ray.origin[i]) * invDir[i];
-		float max = (pMax[i] - ray.origin[i]) * invDir[i];
-		// 坐标为负的话，需要进行交换
-		if (!dirIsNeg[i])
-		{
-			std::swap(min, max);
-		}
-		tEnter = std::max(min, tEnter);
-		tExit = std::min(max, tExit);
-	}
-	return tEnter <= tExit && tExit >= 0;
+    // invDir: ray direction(x,y,z), invDir=(1.0/x,1.0/y,1.0/z), use this because Multiply is faster that Division
+    // dirIsNeg: ray direction(x,y,z), dirIsNeg=[int(x>0),int(y>0),int(z>0)], use this to simplify your logic
+    // TODO test if ray bound intersects
+    float t_enter = std::numeric_limits<float>::min(), t_exit = std::numeric_limits<float>::max();
+    for (int i = 0; i <= 2; i++)
+    {
+        float t_min = (pMin[i] - ray.origin[i]) * invDir[i];
+        float t_max = (pMax[i] - ray.origin[i]) * invDir[i];
+        if (!dirIsNeg[i])
+        {
+            std::swap(t_min, t_max);
+        }
+        t_enter = std::max(t_enter, t_min);
+        t_exit = std::min(t_exit, t_max);
+    }
+    return t_enter <= t_exit && t_exit > 0;
 }
 
 inline Bounds3 Union(const Bounds3 &b1, const Bounds3 &b2)

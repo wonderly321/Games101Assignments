@@ -106,52 +106,21 @@ Intersection BVHAccel::Intersect(const Ray &ray) const
     return isect;
 }
 
-// Intersection BVHAccel::getIntersection(BVHBuildNode *node, const Ray &ray) const
-// {
-//     // TODO Traverse the BVH to find intersection
-//     //递归BVH结构求最小的光线交点
-//     Intersection inter;
-//     std::array<int, 3> dirIsNeg = {int(ray.direction.x > 0),
-//                                    int(ray.direction.y > 0),
-//                                    int(ray.direction.z > 0)};
-//     if (!node->bounds.IntersectP(ray, ray.direction_inv, dirIsNeg))
-//         return inter;
-//     if (node->left == nullptr && node->right == nullptr)
-//         return node->object->getIntersection(ray);
-//     Intersection inter1 = getIntersection(node->left, ray);
-//     Intersection inter2 = getIntersection(node->right, ray);
-//     return inter1.distance < inter2.distance ? inter1 : inter2;
-// }
-
-Intersection BVHAccel::getIntersection(BVHBuildNode* node, const Ray& ray) const
+Intersection BVHAccel::getIntersection(BVHBuildNode *node, const Ray &ray) const
 {
-	Intersection inter;
-
-	// 光线方向
-	float x = ray.direction.x;
-	float y = ray.direction.y;
-	float z = ray.direction.z;
-	// 判断坐标是否为负
-	std::array<int, 3> dirsIsNeg{ int(x > 0),int(y > 0),int(z > 0) };
-
-	// 判断结点的包围盒与光线是否相交
-	if (node->bounds.IntersectP(ray, ray.direction_inv, dirsIsNeg) == false) return inter;
-
-	if (node->left == nullptr && node->right == nullptr)
-	{
-		inter = node->object->getIntersection(ray);
-		return inter;
-	}
-
-	// 递归判断子节点是否存在与光线相交的情况
-	auto hit1 = getIntersection(node->left, ray);
-	auto hit2 = getIntersection(node->right, ray);
-
-	if (hit1.distance < hit2.distance)
-		return hit1;
-	return hit2;
+    // TODO Traverse the BVH to find intersection
+    Intersection intersect;
+    std::array<int, 3> dirIsNeg = {int(ray.direction.x > 0),
+                                   int(ray.direction.y > 0),
+                                   int(ray.direction.z > 0)};
+    if (!node->bounds.IntersectP(ray, ray.direction_inv, dirIsNeg))
+        return intersect;
+    if (node->left == nullptr && node->right == nullptr)
+        return node->object->getIntersection(ray);
+    Intersection intersect1 = getIntersection(node->left, ray);
+    Intersection intersect2 = getIntersection(node->right, ray);
+    return intersect1.distance < intersect2.distance ? intersect1 : intersect2;
 }
-
 
 void BVHAccel::getSample(BVHBuildNode *node, float p, Intersection &pos, float &pdf)
 {
